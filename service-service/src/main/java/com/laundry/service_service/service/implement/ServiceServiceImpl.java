@@ -25,7 +25,7 @@ public class ServiceServiceImpl implements ServiceService {
     @Override
     public ServiceResponse createService(ServiceRequest serviceRequest) {
         // mapping yeu cau phai dung hoan toan ten thuoc dinh o 2 class
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+//        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
         boolean checkName = serviceRepository.existsByServiceName(serviceRequest.getServiceName());
         if (checkName){
@@ -43,7 +43,7 @@ public class ServiceServiceImpl implements ServiceService {
     @Override
     public ServiceResponse updateService(ServiceRequest serviceRequest, Long id) {
 
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+
 
         boolean checkName = serviceRepository.existsByServiceName(serviceRequest.getServiceName());
         if (checkName){
