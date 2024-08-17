@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface StaffRepository extends JpaRepository<Staff,Long> {
     boolean existsByEmail(String email);
     boolean existsByPhoneNumber(String phoneNumber);
+    Staff findByUserName(String username);
 }

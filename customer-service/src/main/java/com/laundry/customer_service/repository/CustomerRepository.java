@@ -12,13 +12,14 @@ import java.util.List;
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
     boolean existsByEmail(String email);
     boolean existsByPhoneNumber(String phoneNumber);
-
+    Customer findByUserName(String username);
     // Lấy tất cả customers và sắp xếp theo tên
     List<Customer> findAllByOrderByNameAsc();
 
     // Lấy Customer theo rank
     @Query("SELECT c FROM Customer c WHERE c.ranking.rankId = :rankId")
     List<Customer> findAllByRankId(@Param("rankId") Long rankId);
+
 
     // Lấy tất cả customers và sắp xếp theo rankId
 //    @Query("SELECT c FROM Customer c ORDER BY c.ranking.rankId ASC")

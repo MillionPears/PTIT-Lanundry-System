@@ -38,7 +38,7 @@ public class StaffServiceImpl implements StaffService {
         staff = staffRepository.save(staff);
 
         StaffResponse staffResponse = modelMapper.map(staff,StaffResponse.class);
-        staffResponse.setUsername(staff.getUsername());
+        staffResponse.setUsername(staff.getUserName());
         return staffResponse;
     }
 
@@ -46,7 +46,7 @@ public class StaffServiceImpl implements StaffService {
     public StaffResponse getStaffById(Long id) {
         Staff staff = staffRepository.findById(id).orElseThrow();
         StaffResponse staffResponse = modelMapper.map(staff,StaffResponse.class);
-
+        staffResponse.setUsername(staff.getUserName());
         return staffResponse;
     }
 
@@ -57,7 +57,7 @@ public class StaffServiceImpl implements StaffService {
         modelMapper.map(staffRequest,staff);
         staff = staffRepository.save(staff);
         StaffResponse staffResponse = modelMapper.map(staff,StaffResponse.class);
-        staffResponse.setUsername(staff.getUsername());
+        staffResponse.setUsername(staff.getUserName());
         return staffResponse;
     }
 
@@ -68,9 +68,19 @@ public class StaffServiceImpl implements StaffService {
         return list.stream()
                 .map(staff -> {
                     StaffResponse staffResponse = modelMapper.map(staff,StaffResponse.class);
-                    staffResponse.setUsername(staff.getUsername());
+                    staffResponse.setUsername(staff.getUserName());
                     return staffResponse;
                 })
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public StaffResponse getStaffByUserName(String username) {
+        Staff staff = staffRepository.findByUserName(username);
+        System.out.println("staff  "+ staff.getUserName());
+        StaffResponse staffResponse = modelMapper.map(staff, StaffResponse.class);
+        staffResponse.setUsername(staff.getUserName());
+        return staffResponse;
+
     }
 }

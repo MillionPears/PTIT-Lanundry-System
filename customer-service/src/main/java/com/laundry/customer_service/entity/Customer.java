@@ -38,10 +38,10 @@ public class Customer {
     private String hobbie;
 
     @Column(name = "avatar", length = 255)
-    private String avartar;
+    private String avatar;
 
     @Column(name = "username", nullable = false, unique = true, length = 100)
-    private String username;
+    private String userName;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "rank_id", nullable = false)

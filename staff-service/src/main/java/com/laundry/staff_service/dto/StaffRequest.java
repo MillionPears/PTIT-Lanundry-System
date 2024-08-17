@@ -4,10 +4,11 @@ import lombok.Data;
 
 @Data
 public class StaffRequest {
-    String staffName;
+    String name;
     String position;
     String email;
     String phoneNumber;
     String avatar;
     String username;
+    int status;
 }

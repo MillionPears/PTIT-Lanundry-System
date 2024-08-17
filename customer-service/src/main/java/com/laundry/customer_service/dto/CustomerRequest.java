@@ -9,6 +9,6 @@ public class CustomerRequest {
     String email;
     String phoneNumber;
     String hobbie;
-    String avartar;
+    String avatar;
     String username;
 }

@@ -10,5 +10,5 @@ public interface StaffService {
     StaffResponse getStaffById(Long id);
     StaffResponse updateStaff(StaffRequest staffRequest,Long id);
     List<StaffResponse> getAllStaff();
-
+    StaffResponse getStaffByUserName(String username);
 }

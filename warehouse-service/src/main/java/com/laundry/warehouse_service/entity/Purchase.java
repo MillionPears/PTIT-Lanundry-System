@@ -11,7 +11,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import java.time.LocalDate;
 
 @Entity
-@Table
+@Table(name="purchase")
 @Setter
 @Getter
 @NoArgsConstructor

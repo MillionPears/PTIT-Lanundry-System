@@ -20,10 +20,10 @@ public class Staff {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "staff_id")
-    private Long staffId;
+    private Long id;
 
     @Column(name = "staff_name", nullable = false, length = 100)
-    private String staffName;
+    private String name;
 
     @Column(name = "position", nullable = false, length = 100)
     private String position;
@@ -38,5 +38,9 @@ public class Staff {
     private String avatar;
 
     @Column(name = "username", nullable = false, length = 100, unique = true)
-    private String username;
+    private String userName;
+
+    @Column(name = "status")
+    private int status; // 0: Nghỉ làm
+                        // 1: Còn làm
 }

@@ -11,13 +11,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 public class CustomerResponse {
-    Long customerId;
+    Long id;
     String name;
     String address;
     String email;
     String phoneNumber;
     String hobbie;
-    String avartar;
+    String avatar;
     String username;
 
     Long rankId;

@@ -34,5 +34,7 @@ public class Goods {
     private int amount;
 
     @Column(name = "is_active", nullable = false)
-    private boolean isActive;
+    private boolean active;
+    @Column(name = "threshold", nullable = false)
+    private int threshold;
 }

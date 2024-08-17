@@ -8,11 +8,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StaffResponse {
-    Long staffId;
-    String staffName;
+    Long id;
+    String name;
     String position;
     String email;
     String phoneNumber;
     String avatar;
     String username;
+    int status;
 }

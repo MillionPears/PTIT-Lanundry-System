@@ -25,8 +25,8 @@ public class Ranking {
     private Long rankId;
 
     @Column(name = "rank_name",unique = true, nullable = false, length = 50)
-    private String rankName;
+    private String rankingName;
 
     @Column(name = "range_amount", nullable = false)
-    private double range;
+    private Double range;
 }

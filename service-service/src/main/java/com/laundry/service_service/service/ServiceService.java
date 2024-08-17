@@ -9,5 +9,9 @@ public interface ServiceService {
     ServiceResponse createService(ServiceRequest serviceRequest);
     ServiceResponse updateService(ServiceRequest serviceRequest, Long id);
     List<ServiceResponse> getServiceByStatus(int status);
-
+    ServiceResponse getServiceById(Long id);
+    void updatePromotionIdToNull(Long promotionId);
+    List<ServiceResponse> updatePromotionIdForServices(List<Long> serviceIds, Long promotionId);
+    List<ServiceResponse> getServiceByPromotionId(Long promotionId);
+    List<ServiceResponse> getAllService();
 }

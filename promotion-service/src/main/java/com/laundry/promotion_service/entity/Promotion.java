@@ -28,11 +28,18 @@ public class Promotion {
     private String promotionName;
 
     @Column(name = "discount_rate", nullable = false)
-    private double discountRate;
+    private Double discountRate;
 
     @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
 
     @Column(name = "end_date", nullable = false)
     private LocalDate endDate;
+
+    @Column(name = "status", nullable = false)
+    private Integer status; // 0: đang hoatj dong
+                            // 1: ngung hoat dong
+
+    @Column(name = "staff_id", nullable = false)
+    private Long staffId;
 }

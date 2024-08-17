@@ -1,6 +1,6 @@
 package com.laundry.user_service.config_security;
 
-import com.laundry.user_service.dto.UserResponse;
+
 import com.laundry.user_service.entity.Account;
 import com.laundry.user_service.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +22,7 @@ public class CustomUserDetails implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
         SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(user.getRole().getRoleName());
+
         List<GrantedAuthority> authorities = new ArrayList<>(Collections.singleton(simpleGrantedAuthority));
         return authorities;
     }

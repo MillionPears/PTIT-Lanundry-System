@@ -36,7 +36,9 @@ public class StaffController {
     @PutMapping("update/{id}")
     public ResponseEntity<ApiResponse<StaffResponse>> updateStaff(@RequestBody StaffRequest staffRequest,@PathVariable Long id){
         StaffResponse staffResponse = staffService.updateStaff(staffRequest,id);
+
         ApiResponse apiResponse = new ApiResponse(GlobalCode.SUCCESS, "Cap nhat thong tin nhan vien thanh cong", staffResponse);
+        System.out.println("haha"+ apiResponse.getData().toString());
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 
@@ -48,5 +50,11 @@ public class StaffController {
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 
+    @GetMapping("getbyusername/{username}")
+    public ResponseEntity<ApiResponse<StaffResponse>> getStaffByUserName(@PathVariable String  username){
+        StaffResponse staffResponse = staffService.getStaffByUserName(username);
+        ApiResponse apiResponse = new ApiResponse(GlobalCode.SUCCESS, "Thong tin nhan vien theo id: "+username, staffResponse);
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
 
 }

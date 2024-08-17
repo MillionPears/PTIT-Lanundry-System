@@ -41,4 +41,6 @@ public class Service {
     @Column(name = "status", nullable = false)
     private int status; // Reference to Promotion in another service
 
+
+
 }

@@ -119,4 +119,25 @@ public class CustomerServiceImpl implements CustomerService {
 
 
     }
+
+    @Override
+    public CustomerResponse getCustomerByUserName(String username) {
+        Customer customer = customerRepository.findByUserName(username);
+        System.out.println("customer"+customer.getId());
+        CustomerResponse customerResponse = modelMapper.map(customer, CustomerResponse.class);
+        customerResponse.setRankId(customer.getRanking().getRankId());
+        return customerResponse;
+    }
+
+    @Override
+    public CustomerResponse getCustomerById(Long id) {
+        Customer customer = customerRepository.findById(id).orElseThrow(
+                ()-> new  EntityNotFoundException(GlobalCode.ERROR_ENTITY_NOT_FOUND,"Khong tim thay Khach Hang")
+        );
+
+        CustomerResponse customerResponse = modelMapper.map(customer,CustomerResponse.class);
+        System.out.println(customerResponse.getName());
+        customerResponse.setRankId(customer.getRanking().getRankId());
+        return customerResponse;
+    }
 }

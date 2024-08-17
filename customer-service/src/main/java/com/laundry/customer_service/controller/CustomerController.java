@@ -56,4 +56,19 @@ public class CustomerController {
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 
+    @GetMapping("getbyusername/{username}")
+    public ResponseEntity<ApiResponse<CustomerResponse>>getCustomer(@PathVariable String username){
+        CustomerResponse customerResponse = customerService.getCustomerByUserName(username);
+        ApiResponse apiResponse = new ApiResponse(GlobalCode.SUCCESS, "Thong tin khach hang", customerResponse);
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
+    @GetMapping("getbyid/{id}")
+    public ResponseEntity<ApiResponse<CustomerResponse>>getCustomerById(@PathVariable Long id){
+        CustomerResponse customerResponse = customerService.getCustomerById(id);
+
+        ApiResponse apiResponse = new ApiResponse(GlobalCode.SUCCESS, "Thong tin khach hang", customerResponse);
+
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
+
 }

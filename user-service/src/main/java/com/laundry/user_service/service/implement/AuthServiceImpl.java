@@ -19,12 +19,14 @@ public class AuthServiceImpl implements AuthService {
 
     private final AuthenticationManager authenticationManager;
     @Override
-    public TokenResponse createToken(LoginRequest loginRequest) {
+    public TokenResponse createToken(String username,  String password) {
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),loginRequest.getPassword())
+                new UsernamePasswordAuthenticationToken(username,password)
         );
         String jwt = jwtHelper.generateJwtToken(authentication);
 
         return new TokenResponse(jwt);
     }
+
+
 }
