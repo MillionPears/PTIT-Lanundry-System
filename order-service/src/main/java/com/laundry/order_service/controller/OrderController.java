@@ -1,9 +1,11 @@
 package com.laundry.order_service.controller;
 
 import com.laundry.order_service.dto.ApiResponse;
+import com.laundry.order_service.dto.OrderKafka;
 import com.laundry.order_service.dto.OrderRequest;
 import com.laundry.order_service.dto.OrderResponse;
 import com.laundry.order_service.exception.GlobalCode;
+import com.laundry.order_service.kafka.producer.OrderKafkaProducer;
 import com.laundry.order_service.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -11,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,7 +21,8 @@ import java.util.List;
 public class OrderController {
 
     private final OrderService orderService;
-
+    private final OrderKafkaProducer orderKafkaProducer;
+    OrderKafka orderKafka = new OrderKafka();
     @PostMapping("create")
     public ResponseEntity<ApiResponse<OrderResponse>> createOrder(@RequestBody OrderRequest orderRequest)
     {
@@ -33,6 +37,25 @@ public class OrderController {
             @PathVariable int status)
     {
         OrderResponse orderResponse = orderService.updateOrderStatus(id,status);
+        // Sinh UUID cho message Kafka
+        String uuid = UUID.randomUUID().toString();
+        // Chuyển đổi OrderResponse thành OrderKafka (có thể cần ánh xạ hoặc tạo đối tượng mới)
+        orderKafka.setUuid(uuid);
+        // Bạn có thể cần ánh xạ các thuộc tính từ orderResponse sang orderKafka nếu cần
+        orderKafka.setOrderDate(orderResponse.getOrderDate());
+        orderKafka.setNote(orderResponse.getNote());
+        orderKafka.setDeadline(orderResponse.getDeadline());
+        orderKafka.setCustomerId(orderResponse.getCustomerId());
+        orderKafka.setStatus(orderResponse.getStatus());
+        orderKafka.setDeliveryTypeId(orderResponse.getDeliveryTypeId());
+        orderKafka.setDeliveryStatus(orderResponse.getDeliveryStatus());
+        orderKafka.setPhoneNumber(orderResponse.getPhoneNumber());
+        orderKafka.setAddress(orderResponse.getAddress());
+        orderKafka.setCustomerName(orderResponse.getCustomerName());
+        orderKafka.setEmail(orderResponse.getEmail());
+
+        orderKafkaProducer.writeToKafka(orderKafka);
+        System.out.println("Received order update: " + orderKafka);
         ApiResponse apiResponse = new ApiResponse(GlobalCode.SUCCESS,"Cập nhật trạng thái đơn hàng thành công", orderResponse);
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }

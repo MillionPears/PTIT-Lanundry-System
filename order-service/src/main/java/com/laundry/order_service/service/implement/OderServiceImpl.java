@@ -1,10 +1,7 @@
 package com.laundry.order_service.service.implement;
 
 
-import com.laundry.order_service.dto.ApiResponse;
-import com.laundry.order_service.dto.CustomerResponse;
-import com.laundry.order_service.dto.OrderRequest;
-import com.laundry.order_service.dto.OrderResponse;
+import com.laundry.order_service.dto.*;
 import com.laundry.order_service.entity.Delivery_Type;
 import com.laundry.order_service.entity.Order;
 import com.laundry.order_service.entity.OrderDetail;
@@ -25,6 +22,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -93,6 +91,33 @@ public class OderServiceImpl implements OrderService {
         {
             invoiceService.createInvoice(order);
         }
+
+        // Sinh UUID cho message Kafka
+//        String uuid = UUID.randomUUID().toString();
+//        OrderKafka orderKafka= modelMapper.map(order,OrderKafka.class);
+//        orderKafka.setUuid(uuid);
+//        // Kiểm tra dữ liệu trong OrderKafka
+//        System.out.println("OrderKafka Data: " + orderKafka);
+//        // Tạo đối tượng OrderKafka
+//        OrderKafka orderKafka = new OrderKafka(
+//                uuid, // UUID cho message
+//                order.getOrderDate(),
+//                order.getNote(),
+//                order.getDeadline(),
+//                order.getCustomerId(),
+//                order.getStatus(),
+//                order.getDeliveryType().getDeliveryId(),
+//                order.getDeliveryStatus(),
+//                order.getPhoneNumber(),
+//                order.getAddress(),
+//                order.getCustomerName(),
+//                order.getEmail()
+//        );
+
+        // Gửi message Kafka với UUID làm khóa
+        //kafkaTemplate.send("your-topic-name", uuid, orderKafka); // Thay thế "your-topic-name" bằng tên topic của bạn
+
+
         OrderResponse orderResponse = modelMapper.map(order,OrderResponse.class);
         orderResponse.setDeliveryTypeId(order.getDeliveryType().getDeliveryId());
         return orderResponse;
