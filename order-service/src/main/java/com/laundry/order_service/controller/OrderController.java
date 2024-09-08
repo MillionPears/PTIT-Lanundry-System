@@ -22,7 +22,7 @@ public class OrderController {
 
     private final OrderService orderService;
     private final OrderKafkaProducer orderKafkaProducer;
-    OrderKafka orderKafka = new OrderKafka();
+
     @PostMapping("create")
     public ResponseEntity<ApiResponse<OrderResponse>> createOrder(@RequestBody OrderRequest orderRequest)
     {
@@ -37,25 +37,11 @@ public class OrderController {
             @PathVariable int status)
     {
         OrderResponse orderResponse = orderService.updateOrderStatus(id,status);
-        // Sinh UUID cho message Kafka
-        String uuid = UUID.randomUUID().toString();
-        // Chuyển đổi OrderResponse thành OrderKafka (có thể cần ánh xạ hoặc tạo đối tượng mới)
-        orderKafka.setUuid(uuid);
-        // Bạn có thể cần ánh xạ các thuộc tính từ orderResponse sang orderKafka nếu cần
-        orderKafka.setOrderDate(orderResponse.getOrderDate());
-        orderKafka.setNote(orderResponse.getNote());
-        orderKafka.setDeadline(orderResponse.getDeadline());
-        orderKafka.setCustomerId(orderResponse.getCustomerId());
-        orderKafka.setStatus(orderResponse.getStatus());
-        orderKafka.setDeliveryTypeId(orderResponse.getDeliveryTypeId());
-        orderKafka.setDeliveryStatus(orderResponse.getDeliveryStatus());
-        orderKafka.setPhoneNumber(orderResponse.getPhoneNumber());
-        orderKafka.setAddress(orderResponse.getAddress());
-        orderKafka.setCustomerName(orderResponse.getCustomerName());
-        orderKafka.setEmail(orderResponse.getEmail());
 
-        orderKafkaProducer.writeToKafka(orderKafka);
-        System.out.println("Received order update: " + orderKafka);
+        String uuid = UUID.randomUUID().toString();
+
+        orderKafkaProducer.writeToKafka(uuid,orderResponse);
+
         ApiResponse apiResponse = new ApiResponse(GlobalCode.SUCCESS,"Cập nhật trạng thái đơn hàng thành công", orderResponse);
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }

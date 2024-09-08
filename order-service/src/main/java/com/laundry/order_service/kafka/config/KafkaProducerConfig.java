@@ -2,6 +2,7 @@ package com.laundry.order_service.kafka.config;
 
 
 import com.laundry.order_service.dto.OrderKafka;
+import com.laundry.order_service.dto.OrderResponse;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,7 +25,7 @@ public class KafkaProducerConfig {
     private String bootstrapAddress;
 
     @Bean
-    public ProducerFactory<String, OrderKafka> orderProducerFactory() {
+    public ProducerFactory<String, OrderResponse> orderProducerFactory() {
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,bootstrapAddress);
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -33,7 +34,7 @@ public class KafkaProducerConfig {
     }
 
     @Bean
-    public KafkaTemplate<String, OrderKafka> kafkaTemplate() {
+    public KafkaTemplate<String, OrderResponse> kafkaTemplate() {
         return new KafkaTemplate<>(orderProducerFactory());
     }
 

@@ -2,6 +2,7 @@ package com.laundry.notification_service.config;
 
 
 import com.laundry.notification_service.dto.OrderKafka;
+import com.laundry.notification_service.dto.OrderResponse;
 import com.laundry.notification_service.exception.KafkaErrorHandler;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -25,7 +26,7 @@ public class KafkaConsumerConfig {
     private String bootstrapAddress;
 
     @Bean
-    public ConsumerFactory<String, OrderKafka> OrderConsumerFactory()
+    public ConsumerFactory<String, OrderResponse> OrderConsumerFactory()
     {
 
         // Creating a map of string-object type
@@ -44,16 +45,16 @@ public class KafkaConsumerConfig {
                 JsonDeserializer.class);
 
         config.put(JsonDeserializer.TRUSTED_PACKAGES, "*"); // Ensure trusted packages are configured
-        config.put(JsonDeserializer.VALUE_DEFAULT_TYPE, OrderKafka.class.getName());
+        config.put(JsonDeserializer.VALUE_DEFAULT_TYPE, OrderResponse.class.getName());
 
-        return new DefaultKafkaConsumerFactory<>(config, new StringDeserializer(), new JsonDeserializer<>(OrderKafka.class));
+        return new DefaultKafkaConsumerFactory<>(config, new StringDeserializer(), new JsonDeserializer<>(OrderResponse.class));
     }
     // Creating a Listener
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, OrderKafka> bookListener()
+    public ConcurrentKafkaListenerContainerFactory<String, OrderResponse> bookListener()
     {
         ConcurrentKafkaListenerContainerFactory<
-                String, OrderKafka> factory
+                String, OrderResponse> factory
                 = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(OrderConsumerFactory());
         return factory;
