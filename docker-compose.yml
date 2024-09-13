@@ -1,0 +1,249 @@
+services:
+  frontend-nextjs:
+    build:
+      context: ../Laundry_FrontEnd/laundryfrontend   # Thư mục chứa Dockerfile và package.json
+      dockerfile: Dockerfile
+    container_name: nextjs-docker
+    restart: always
+    ports:
+      - 3000:3000
+    networks:
+      - my-network
+    environment:
+      NEXT_PUBLIC_API_ENDPOINT : http://apigateway:9191/api
+      NEXT_PUBLIC_URL : http://localhost:3000
+  discovery-server:
+    build:
+      context: ./discovery-server  # Thư mục chứa Dockerfile của discovery-server
+    container_name: discovery-docker
+    ports:
+      - 8761:8761
+    environment:
+      SERVICE_NAME: discovery-server
+      SERVER_PORT: 8761
+      EUREKA_CLIENT_REGISTER_WITH_EUREKA: false
+      EUREKA_CLIENT_FETCH_REGISTRY: false
+    networks:
+      - my-network
+
+  apigateway:
+    build:
+      context: ./apigateway  # Thư mục chứa Dockerfile của apigateway
+    container_name: apigateway-docker
+    ports:
+      - 9191:9191
+    depends_on:
+      - discovery-server
+    environment:
+      SERVICE_NAME: apigateway
+      SERVER_PORT: 9191
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-server:8761/eureka/
+    networks:
+      - my-network
+
+  customer-service:
+    build:
+      context: ./customer-service  # Thư mục chứa Dockerfile của customer-service
+    container_name: customer-service-docker
+    ports:
+      - 9001:9001
+    depends_on:
+      - mysql
+      - discovery-server
+      - apigateway
+    environment:
+      SERVICE_NAME: customer-service
+      SERVER_PORT: 9001
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-server:8761/eureka/
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/customer_service
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 123456trieu
+    networks:
+      - my-network
+
+  notification-service:
+    build:
+      context: ./notification-service  # Thư mục chứa Dockerfile của notification-service
+    container_name: notification-service-docker
+    ports:
+      - 9008:9008
+    depends_on:
+      - kafka
+      - discovery-server
+      - apigateway
+    environment:
+      SERVICE_NAME: notification-service
+      SERVER_PORT: 9008
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-server:8761/eureka/
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    networks:
+      - my-network
+
+  order-service:
+    build:
+      context: ./order-service  # Thư mục chứa Dockerfile của order-service
+    container_name: order-service-docker
+    ports:
+      - 9004:9004
+    depends_on:
+      - kafka
+      - mysql
+      - discovery-server
+      - apigateway
+    environment:
+      SERVICE_NAME: order-service
+      SERVER_PORT: 9004
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-server:8761/eureka/
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/order_service?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 123456trieu
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    networks:
+      - my-network
+
+  promotion-service:
+    build:
+      context: ./promotion-service  # Thư mục chứa Dockerfile của promotion-service
+    container_name: promotion-service-docker
+    ports:
+      - 9005:9005
+    depends_on:
+      - mysql
+      - discovery-server
+      - apigateway
+    environment:
+      SERVICE_NAME: promotion-service
+      SERVER_PORT: 9005
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-server:8761/eureka/
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/promotion_service?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 123456trieu
+    networks:
+      - my-network
+
+  service-service:
+    build:
+      context: ./service-service  # Thư mục chứa Dockerfile của service-service
+    container_name: service-service-docker
+    ports:
+      - 9006:9006
+    depends_on:
+      - mysql
+      - discovery-server
+      - apigateway
+    environment:
+      SERVICE_NAME: service-service
+      SERVER_PORT: 9006
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-server:8761/eureka/
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/service_service?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 123456trieu
+    networks:
+      - my-network
+
+  staff-service:
+    build:
+      context: ./staff-service  # Thư mục chứa Dockerfile của staff-service
+    container_name: staff-service-docker
+    ports:
+      - 9003:9003
+    depends_on:
+      - mysql
+      - discovery-server
+      - apigateway
+    environment:
+      SERVICE_NAME: staff-service
+      SERVER_PORT: 9003
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-server:8761/eureka/
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/staff_service?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 123456trieu
+    networks:
+      - my-network
+
+  user-service:
+    build:
+      context: ./user-service  # Thư mục chứa Dockerfile của user-service
+    container_name: user-service-docker
+    ports:
+      - 9002:9002
+    depends_on:
+      - mysql
+      - discovery-server
+      - apigateway
+    environment:
+      SERVICE_NAME: user-service
+      SERVER_PORT: 9002
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-server:8761/eureka/
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/user_service?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 123456trieu
+    networks:
+      - my-network
+
+  warehouse-service:
+    build:
+      context: ./warehouse-service  # Thư mục chứa Dockerfile của warehouse-service
+    container_name: warehouse-service-docker
+    ports:
+      - 9007:9007
+    depends_on:
+      - mysql
+      - discovery-server
+      - apigateway
+    environment:
+      SERVICE_NAME: warehouse-service
+      SERVER_PORT: 9007
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-server:8761/eureka/
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/warehouse_service?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 123456trieu
+    networks:
+      - my-network
+
+  kafka:
+    image: wurstmeister/kafka:latest
+    container_name: kafka-docker
+    ports:
+      - "9092:9092"  # Cổng bên ngoài (host) ánh xạ đến cổng bên trong (container)
+      - "9093:9093"  # Thêm cổng bên ngoài cho OUTSIDE listener nếu cần thiết
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka:9092,OUTSIDE://localhost:9093
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_LISTENERS: INSIDE://0.0.0.0:9092,OUTSIDE://0.0.0.0:9093
+      KAFKA_LISTENER_NAME: INSIDE
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    networks:
+      - my-network
+
+
+
+  zookeeper:
+    image: wurstmeister/zookeeper:latest
+    container_name: zookeeper-docker
+    ports:
+      - "2181:2181"
+    networks:
+      - my-network
+
+  mysql:
+    image: mysql:8.0.36
+    ports:
+      - 3307:3306
+    restart: always
+    environment:
+
+      MYSQL_ROOT_PASSWORD: 123456trieu
+    volumes:
+      - mysql:/var/lib/mysql
+    networks:
+      - my-network
+
+networks:
+  my-network:
+    driver: bridge
+
+volumes:
+  mysql:
+

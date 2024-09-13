@@ -44,6 +44,7 @@ public class GatewayConfig {
         List<String> allowedRoles = Arrays.asList("ADMIN", "KH","NV"); // Example of allowed roles
 
         return builder.routes()
+
                 // Customer route
                 .route("order-service", r->r.path(
                                 Constants.ORDER_PREFIX+"/create",
@@ -57,6 +58,14 @@ public class GatewayConfig {
                                         .collect(Collectors.toList())
                         )))
                         .uri("lb://order-service"))
+                .route("notification-service", r -> r.path("/ws")
+                        //.and()
+                        //.method(HttpMethod.GET, HttpMethod.POST, HttpMethod.DELETE, HttpMethod.PUT)
+                        //.filters(f -> f.filter(applyJwtAuthentication(allowedRoles)))
+                        .uri("lb://notification-service")) // Forward WebSocket requests
+                .route("websocket-route", r -> r.path("/ws/**")
+                        .uri("lb://notification-service")) // Forward WebSocket requests
+
                 .route("customer-service", r -> r.path(
 
 
